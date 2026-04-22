@@ -1,95 +1,70 @@
-import { useMemo, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import AppHeader from "../components/AppHeader";
-import BottomTabBar from "../components/BottomTabBar";
-import CategoryChip from "../components/CategoryChip";
-import SearchBar from "../components/SearchBar";
-import SessionCard from "../components/SessionCard";
-import { COLORS } from "../constants/colors";
-import { allSessions, chips } from "../constants/mockData";
-import { SPACING } from "../constants/spacing";
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-const SessionsScreen = () => {
-  const [activeChip, setActiveChip] = useState("All");
-
-  const filteredSessions = useMemo(() => {
-    if (activeChip === "All") return allSessions;
-    return allSessions.filter((item) =>
-      item.age.includes(activeChip.replace("Age ", "Age ")),
-    );
-  }, [activeChip]);
-
+const SessionsScreen = ({ navigation }) => {
   return (
-    <View style={styles.screen}>
-      <ScrollView
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
+    <View style={styles.container}>
+      <Text style={styles.title}>Sessions</Text>
+
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() =>
+          navigation.navigate("SessionDetails", {
+            title: "Nature Walk",
+            age: "4-8",
+            duration: "30 min",
+          })
+        }
       >
-        <AppHeader
-          title="Explore Sessions"
-          subtitle="Find the perfect activity for your family"
-          leftIcon="‹"
-        />
+        <Text style={styles.cardTitle}>Nature Walk</Text>
+        <Text style={styles.cardMeta}>Tap to view details</Text>
+      </TouchableOpacity>
 
-        <SearchBar />
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.chipsRow}
-        >
-          {chips.map((chip) => (
-            <CategoryChip
-              key={chip.id}
-              title={chip.title}
-              active={activeChip === chip.title}
-              onPress={() => setActiveChip(chip.title)}
-            />
-          ))}
-        </ScrollView>
-
-        <View style={styles.grid}>
-          {filteredSessions.map((item) => (
-            <View key={item.id} style={styles.gridItem}>
-              <SessionCard
-                title={item.title}
-                subtitle={item.subtitle}
-                age={item.age}
-                duration={item.duration}
-                backgroundColor={item.backgroundColor}
-              />
-            </View>
-          ))}
-        </View>
-
-        <BottomTabBar activeTab="Sessions" />
-      </ScrollView>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() =>
+          navigation.navigate("SessionDetails", {
+            title: "Paper Bridge Builder",
+            age: "7-10",
+            duration: "40 min",
+          })
+        }
+      >
+        <Text style={styles.cardTitle}>Paper Bridge Builder</Text>
+        <Text style={styles.cardMeta}>Tap to view details</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
+export default SessionsScreen;
+
 const styles = StyleSheet.create({
-  screen: {
+  container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    padding: 20,
+    backgroundColor: "#F5F0E8",
   },
-  content: {
-    padding: SPACING.md,
-    paddingTop: SPACING.xl,
-    paddingBottom: SPACING.xl,
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1F2A24",
+    marginBottom: 20,
   },
-  chipsRow: {
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.md,
+  card: {
+    marginTop: 12,
+    padding: 20,
+    backgroundColor: "#FFFDF9",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E8E0D5",
   },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+  cardTitle: {
+    fontWeight: "700",
+    color: "#1F2A24",
   },
-  gridItem: {
-    marginBottom: SPACING.md,
+  cardMeta: {
+    marginTop: 6,
+    color: "#6E756F",
   },
 });
-
-export default SessionsScreen;
